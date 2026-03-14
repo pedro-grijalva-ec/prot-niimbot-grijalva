@@ -38,7 +38,15 @@
       "output": "release"
     },
     "win": {
-      "target": "portable"
+      "target": "portable",
+      "publish": [
+        "github"
+      ]
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "pedro-grijalva-ec",
+      "repo": "prot-niimbot-grijalva"
     }
   }
 }

@@ -1,0 +1,32 @@
+name: Build and Release Bridge
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies (Root)
+        run: npm install
+
+      - name: Install dependencies (Desktop Bridge)
+        working-directory: ./desktop-bridge
+        run: npm install
+
+      - name: Build and Publish
+        working-directory: ./desktop-bridge
+        run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
