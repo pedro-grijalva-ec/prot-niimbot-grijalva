@@ -16,3 +16,6 @@ Este proyecto es un prototipo funcional para imprimir etiquetas en una impresora
 
 ## Despliegue
 Ver [walkthrough.md](file:///home/neo/.gemini/antigravity/brain/d21082e6-5fd8-41d3-af6f-6d9b7198f189/walkthrough.md) para instrucciones detalladas de despliegue con Docker Compose.
+
+## Integración para otras Apps
+Si deseas conectar una App externa (ej. Flutter o Web) para imprimir automáticamente, consulta la [Guía de Integración API](file:///home/neo/proj/prot_niimbot/docs/api_guide.md).
