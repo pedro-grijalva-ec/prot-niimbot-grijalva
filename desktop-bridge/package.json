@@ -43,6 +43,15 @@
     "directories": {
       "output": "release"
     },
+    "asarUnpack": [
+      "node_modules/sharp/**",
+      "node_modules/color/**",
+      "node_modules/color-name/**",
+      "node_modules/color-convert/**",
+      "node_modules/color-string/**",
+      "node_modules/@stoprocent/**",
+      "node_modules/@serialport/**"
+    ],
     "win": {
       "target": "portable",
       "publish": [
@@ -52,7 +61,8 @@
     "publish": {
       "provider": "github",
       "owner": "pedro-grijalva-ec",
-      "repo": "prot-niimbot-grijalva"
+      "repo": "prot-niimbot-grijalva",
+      "draft": false
     }
   }
 }
