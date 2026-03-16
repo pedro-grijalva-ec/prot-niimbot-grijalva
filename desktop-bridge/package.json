@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.0",
+    "@tailwindcss/postcss": "^4.0.0",
     "autoprefixer": "^10.4.16",
     "electron": "^34.3.0",
     "electron-builder": "^25.1.8",
