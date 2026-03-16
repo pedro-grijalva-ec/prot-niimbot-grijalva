@@ -62,7 +62,7 @@
       "provider": "github",
       "owner": "pedro-grijalva-ec",
       "repo": "prot-niimbot-grijalva",
-      "draft": false
+      "releaseType": "release"
     }
   }
 }
