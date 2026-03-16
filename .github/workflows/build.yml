@@ -32,6 +32,13 @@ jobs:
         working-directory: ./desktop-bridge
         run: npm install
 
+      - name: Set version from git tag
+        working-directory: ./desktop-bridge
+        shell: bash
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          npm version --no-git-tag-version $VERSION
+
       - name: Build and Publish
         working-directory: ./desktop-bridge
         run: npm run build
