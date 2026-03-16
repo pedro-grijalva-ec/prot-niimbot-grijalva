@@ -12,6 +12,10 @@
   },
   "author": "pedro-grijalva-ec",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pedro-grijalva-ec/prot-niimbot-grijalva.git"
+  },
   "dependencies": {
     "@mmote/niimblue-node": "^0.0.12",
     "sharp": "^0.34.5",
