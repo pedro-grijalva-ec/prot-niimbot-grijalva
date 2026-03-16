@@ -1,7 +1,8 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { NiimbotClient } from '@mmote/niimblue-node';
+import { NiimbotHeadlessBleClient, ImageEncoder } from '@mmote/niimblue-node';
+import sharp from 'sharp';
 import axios from 'axios';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -38,9 +39,14 @@ app.on('window-all-closed', () => {
 
 ipcMain.handle('printer:connect', async () => {
     try {
-        niimbot = new NiimbotClient();
-        await niimbot.connect(); // This picks the first B1 usually, or we can scan
-        return { success: true, model: 'Niimbot B1' };
+        const devices = await NiimbotHeadlessBleClient.scan(5000);
+        if (devices.length === 0) {
+            return { success: false, error: 'No Niimbot devices found via Bluetooth' };
+        }
+        niimbot = new NiimbotHeadlessBleClient();
+        niimbot.setAddress(devices[0].address);
+        await niimbot.connect();
+        return { success: true, model: devices[0].name || 'Niimbot B1' };
     } catch (err) {
         return { success: false, error: err.message };
     }
@@ -73,15 +79,18 @@ async function pollJobs() {
             for (const job of jobs) {
                 mainWindow.webContents.send('bridge:log', `Printing job ${job.id} (${job.type})`);
 
-                // Convert base64 bitmap to Buffer/Uint8Array
+                // Convert base64 bitmap to EncodedImage via ImageEncoder
                 const bitmapBuffer = Buffer.from(job.bitmap, 'base64');
+                const encodedImage = await ImageEncoder.encodeImage(sharp(bitmapBuffer));
 
-                // NIIMBLUE-NODE conversion: NiimbotClient expects a specific format
-                // For B1, we usually send the bitmap data
-                await niimbot.print({
-                    image: bitmapBuffer,
-                    // B1 specific tasks would go here if needed via the library
-                });
+                const printTask = niimbot.abstraction.newPrintTask('B1', { totalPages: 1 });
+                try {
+                    await printTask.printInit();
+                    await printTask.printPage(encodedImage, 1);
+                    await printTask.waitForFinished();
+                } finally {
+                    await niimbot.abstraction.printEnd();
+                }
 
                 // Mark as complete
                 await axios.post(`${apiUrl}/v1/jobs/${job.id}/complete`);
